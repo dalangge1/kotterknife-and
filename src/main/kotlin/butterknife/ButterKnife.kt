@@ -15,6 +15,7 @@ public fun <T : View> Dialog.bindView(id: Int): ReadOnlyProperty<Any, T> = ViewB
 public fun <T : View> Fragment.bindView(id: Int): ReadOnlyProperty<Any, T> = ViewBinding(id)
 public fun <T : View> SupportFragment.bindView(id: Int): ReadOnlyProperty<Any, T> = ViewBinding(id)
 public fun <T : View> ViewHolder.bindView(id: Int): ReadOnlyProperty<Any, T> = ViewBinding(id)
+public fun <T : View> ViewContainer.bindView(id: Int): ReadOnlyProperty<Any, T> = ViewBinding(id)
 
 public fun <T : View> ViewGroup.bindOptionalView(id: Int): ReadOnlyProperty<Any, T?> = OptionalViewBinding(id)
 public fun <T : View> Activity.bindOptionalView(id: Int): ReadOnlyProperty<Any, T?> = OptionalViewBinding(id)
@@ -22,6 +23,7 @@ public fun <T : View> Dialog.bindOptionalView(id: Int): ReadOnlyProperty<Any, T?
 public fun <T : View> Fragment.bindOptionalView(id: Int): ReadOnlyProperty<Any, T?> = OptionalViewBinding(id)
 public fun <T : View> SupportFragment.bindOptionalView(id: Int): ReadOnlyProperty<Any, T?> = OptionalViewBinding(id)
 public fun <T : View> ViewHolder.bindOptionalView(id: Int): ReadOnlyProperty<Any, T?> = OptionalViewBinding(id)
+public fun <T : View> ViewContainer.bindOptionalView(id: Int): ReadOnlyProperty<Any, T?> = OptionalViewBinding(id)
 
 public fun <T : View> ViewGroup.bindViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = ViewListBinding(ids)
 public fun <T : View> Activity.bindViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = ViewListBinding(ids)
@@ -29,6 +31,7 @@ public fun <T : View> Dialog.bindViews(vararg ids: Int): ReadOnlyProperty<Any, L
 public fun <T : View> Fragment.bindViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = ViewListBinding(ids)
 public fun <T : View> SupportFragment.bindViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = ViewListBinding(ids)
 public fun <T : View> ViewHolder.bindViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = ViewListBinding(ids)
+public fun <T : View> ViewContainer.bindViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = ViewListBinding(ids)
 
 public fun <T : View> ViewGroup.bindOptionalViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = OptionalViewListBinding(ids)
 public fun <T : View> Activity.bindOptionalViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = OptionalViewListBinding(ids)
@@ -36,6 +39,7 @@ public fun <T : View> Dialog.bindOptionalViews(vararg ids: Int): ReadOnlyPropert
 public fun <T : View> Fragment.bindOptionalViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = OptionalViewListBinding(ids)
 public fun <T : View> SupportFragment.bindOptionalViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = OptionalViewListBinding(ids)
 public fun <T : View> ViewHolder.bindOptionalViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = OptionalViewListBinding(ids)
+public fun <T : View> ViewContainer.bindOptionalViews(vararg ids: Int): ReadOnlyProperty<Any, List<T>> = OptionalViewListBinding(ids)
 
 private fun findView<T : View>(thisRef: Any, id: Int): T? {
   [suppress("UNCHECKED_CAST")]
@@ -46,6 +50,7 @@ private fun findView<T : View>(thisRef: Any, id: Int): T? {
     is Fragment -> thisRef.getView().findViewById(id)
     is SupportFragment -> thisRef.getView().findViewById(id)
     is ViewHolder -> thisRef.itemView.findViewById(id)
+    is ViewContainer -> thisRef.view.findViewById(id)
     else -> throw IllegalStateException("Unable to find views on type.")
   } as T?
 }
@@ -96,4 +101,7 @@ private class Lazy<T> {
     [suppress("UNCHECKED_CAST")]
     return value as T
   }
+}
+
+public open class ViewContainer(val view: View) {
 }

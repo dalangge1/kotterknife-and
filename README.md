@@ -18,11 +18,18 @@ public class PersonView(context: Context, attrs: AttributeSet?) : LinearLayout(c
 
   // List binding with optional items being omitted.
   val nameViews: List<TextView> by bindOptionalViews(R.id.first_name, R.id.middle_name, R.id.last_name)
+
+  // Binding elements to custom container
+  class ExampleViewContainer(view: View) : ViewContainer(view) {
+    val name: View by bindView(R.id.name)
+  }
+  var container: ExampleViewContainer by Delegates.notNull()
+  container = ExampleViewContainer(someView)
 }
 ```
 
 These methods are available on subclasses of `Activity`, `Dialog`, `ViewGroup`, `Fragment`,
-the support library `Fragment`, and recycler view's `ViewHolder`.
+the support library `Fragment`, and recycler view's `ViewHolder` or custom container based on `ViewContainer`.
 
 
 
