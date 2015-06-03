@@ -144,6 +144,17 @@ public class ViewTest : AndroidTestCase() {
     assertEquals(2, example.name.size())
   }
 
+  public fun testViewContainerBind() {
+    class ExampleViewContainer(view: View) : ViewContainer(view) {
+      val name: View by bindView(1)
+    }
+
+    val layout = FrameLayout(getContext())
+    layout.addView(viewWithId(1))
+    val example = ExampleViewContainer(layout)
+    assertNotNull(example.name)
+  }
+
   private fun viewWithId(id: Int) : View {
     val view = View(getContext())
     view.setId(id)
