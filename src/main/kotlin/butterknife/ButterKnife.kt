@@ -76,19 +76,19 @@ private val ViewHolder.viewFinder: ViewHolder.(Int) -> View?
 private fun viewNotFound(id:Int, desc: PropertyMetadata) =
     throw IllegalStateException("View ID $id for '${desc.name}' not found.")
 
-suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST")
 private fun required<T, V : View>(id: Int, finder : T.(Int) -> View?)
     = Lazy { t : T, desc -> t.finder(id) as V? ?: viewNotFound(id, desc) }
 
-suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST")
 private fun optional<T, V : View>(id: Int, finder : T.(Int) -> View?)
     = Lazy { t : T, desc ->  t.finder(id) as V? }
 
-suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST")
 private fun required<T, V : View>(ids: IntArray, finder : T.(Int) -> View?)
     = Lazy { t : T, desc -> ids.map { t.finder(it) as V? ?: viewNotFound(it, desc) } }
 
-suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST")
 private fun optional<T, V : View>(ids: IntArray, finder : T.(Int) -> View?)
     = Lazy { t : T, desc -> ids.map { t.finder(it) as V? }.filterNotNull() }
 
@@ -97,11 +97,11 @@ private class Lazy<T, V>(private val initializer : (T, PropertyMetadata) -> V) :
   private object EMPTY
   private var value: Any? = EMPTY
 
-  override fun get(thisRef: T, desc: PropertyMetadata): V {
+  override fun get(thisRef: T, property: PropertyMetadata): V {
     if (value == EMPTY) {
-      value = initializer(thisRef, desc)
+      value = initializer(thisRef, property)
     }
-    @suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST")
     return value as V
   }
 }
