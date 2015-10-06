@@ -60,7 +60,7 @@ public fun <V : View> SupportFragment.bindOptionalViews(vararg ids: Int)
 public fun <V : View> ViewHolder.bindOptionalViews(vararg ids: Int)
     : ReadOnlyProperty<ViewHolder, List<V>> = optional(ids, viewFinder)
 
-fun View.onClick(listenerFunction: () -> Unit)
+public fun View.onClick(listenerFunction: () -> Unit)
 {
     val listener = View.OnClickListener { listenerFunction.invoke() }
     this.setOnClickListener(listener)
