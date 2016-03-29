@@ -9,6 +9,15 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import android.support.v4.app.Fragment as SupportFragment
 
+public fun <V: View> Any.bindView(view: View, id: Int)
+    : ReadOnlyProperty<Any, V> = required(id, view.viewFinder())
+public fun <V: View> Any.bindOptionalView(view: View, id: Int)
+    : ReadOnlyProperty<Any, V?> = optional(id, view.viewFinder())
+public fun <V : View> Any.bindViews(view: View, vararg ids: Int)
+    : ReadOnlyProperty<View, List<V>> = required(ids, view.viewFinder())
+public fun <V : View> Any.bindOptionalViews(view: View, vararg ids: Int)
+    : ReadOnlyProperty<View, List<V>> = optional(ids, view.viewFinder())
+
 public fun <V : View> View.bindView(id: Int)
     : ReadOnlyProperty<View, V> = required(id, viewFinder)
 public fun <V : View> Activity.bindView(id: Int)
@@ -73,6 +82,7 @@ private val SupportFragment.viewFinder: SupportFragment.(Int) -> View?
     get() = { view!!.findViewById(it) }
 private val ViewHolder.viewFinder: ViewHolder.(Int) -> View?
     get() = { itemView.findViewById(it) }
+private fun View.viewFinder(): Any.(Int) -> View? = { findViewById(it) }
 
 private fun viewNotFound(id:Int, desc: KProperty<*>): Nothing =
     throw IllegalStateException("View ID $id for '${desc.name}' not found.")
