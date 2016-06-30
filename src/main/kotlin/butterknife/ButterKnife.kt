@@ -10,7 +10,7 @@ import kotlin.reflect.KProperty
 import android.support.v4.app.Fragment as SupportFragment
 
 interface KotterKnife {
-    val rootView: View
+    val kotterKnifeView: View
 }
 
 public fun <V : View> View.bindView(id: Int)
@@ -86,7 +86,7 @@ private val SupportFragment.viewFinder: SupportFragment.(Int) -> View?
 private val ViewHolder.viewFinder: ViewHolder.(Int) -> View?
     get() = { itemView.findViewById(it) }
 private val KotterKnife.viewFinder: KotterKnife.(Int) -> View?
-    get() = { rootView.findViewById(it) }
+    get() = { kotterKnifeView.findViewById(it) }
 
 private fun viewNotFound(id:Int, desc: KProperty<*>): Nothing =
     throw IllegalStateException("View ID $id for '${desc.name}' not found.")
