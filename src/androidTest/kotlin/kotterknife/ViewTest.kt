@@ -5,12 +5,9 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.test.AndroidTestCase
 import android.view.View
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertEquals
 
-public class ViewTest : AndroidTestCase() {
-  public fun testCast() {
+class ViewTest : AndroidTestCase() {
+  fun testCast() {
     class Example(context: Context) : FrameLayout(context) {
       val name : TextView by bindView(1)
     }
@@ -20,7 +17,7 @@ public class ViewTest : AndroidTestCase() {
     assertNotNull(example.name)
   }
 
-  public fun testFindCached() {
+  fun testFindCached() {
     class Example(context: Context) : FrameLayout(context) {
       val name : View by bindView(1)
     }
@@ -32,7 +29,7 @@ public class ViewTest : AndroidTestCase() {
     assertNotNull(example.name)
   }
 
-  public fun testOptional() {
+  fun testOptional() {
     class Example(context: Context) : FrameLayout(context) {
       val present: View? by bindOptionalView(1)
       val missing: View? by bindOptionalView(2)
@@ -44,7 +41,7 @@ public class ViewTest : AndroidTestCase() {
     assertNull(example.missing)
   }
 
-  public fun testOptionalCached() {
+  fun testOptionalCached() {
     class Example(context: Context) : FrameLayout(context) {
       val present: View? by bindOptionalView(1)
       val missing: View? by bindOptionalView(2)
@@ -60,7 +57,7 @@ public class ViewTest : AndroidTestCase() {
     assertNull(example.missing)
   }
 
-  public fun testMissingFails() {
+  fun testMissingFails() {
     class Example(context: Context) : FrameLayout(context) {
       val name : TextView? by bindView(1)
     }
@@ -73,7 +70,7 @@ public class ViewTest : AndroidTestCase() {
     }
   }
 
-  public fun testList() {
+  fun testList() {
     class Example(context: Context) : FrameLayout(context) {
       val name : List<TextView> by bindViews(1, 2, 3)
     }
@@ -86,7 +83,7 @@ public class ViewTest : AndroidTestCase() {
     assertEquals(3, example.name.count())
   }
 
-  public fun testListCaches() {
+  fun testListCaches() {
     class Example(context: Context) : FrameLayout(context) {
       val name : List<TextView> by bindViews(1, 2, 3)
     }
@@ -102,7 +99,7 @@ public class ViewTest : AndroidTestCase() {
     assertEquals(3, example.name.count())
   }
 
-  public fun testListMissingFails() {
+  fun testListMissingFails() {
     class Example(context: Context) : FrameLayout(context) {
       val name : List<TextView> by bindViews(1, 2, 3)
     }
@@ -117,7 +114,7 @@ public class ViewTest : AndroidTestCase() {
     }
   }
 
-  public fun testOptionalList() {
+  fun testOptionalList() {
     class Example(context: Context) : FrameLayout(context) {
       val name : List<TextView> by bindOptionalViews(1, 2, 3)
     }
@@ -129,7 +126,7 @@ public class ViewTest : AndroidTestCase() {
     assertEquals(2, example.name.count())
   }
 
-  public fun testOptionalListCaches() {
+  fun testOptionalListCaches() {
     class Example(context: Context) : FrameLayout(context) {
       val name : List<TextView> by bindOptionalViews(1, 2, 3)
     }
