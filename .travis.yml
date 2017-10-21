@@ -2,9 +2,9 @@ language: android
 
 android:
   components:
-    # Update tools and then platform-tools explicitly so lint gets an updated database. Can be removed once 3.0 is out.
+    # https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943
     - tools
-    - platform-tools
+    - tools
 
 jdk:
   - oraclejdk8
@@ -12,13 +12,12 @@ jdk:
 before_install:
   # Install SDK license so Android Gradle plugin can install deps.
   - mkdir "$ANDROID_HOME/licenses" || true
-  - echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-  # Install the rest of tools (e.g., avdmanager)
-  - sdkmanager tools
-  # Install the system image
-  - sdkmanager "system-images;android-21;default;armeabi-v7a"
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+  # Install Android dependencies
+  - echo y | ${ANDROID_HOME}tools/bin/sdkmanager --channel=3 "tools" "platform-tools" "build-tools;26.0.2" "platforms;android-26" "system-images;android-21;default;armeabi-v7a"
   # Create and start emulator for the script. Meant to race the install task.
-  - echo no | avdmanager create avd --force -n test -k "system-images;android-21;default;armeabi-v7a"
+  - echo no | ${ANDROID_HOME}tools/bin/avdmanager create avd --force -n test -k "system-images;android-21;default;armeabi-v7a"
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
 
 install: ./gradlew clean assemble assembleAndroidTest --stacktrace
