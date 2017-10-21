@@ -27,7 +27,10 @@ dependencies {
   // TODO make these provided? sibling modules?
   compile "com.android.support:support-v4:$supportLibVersion"
   compile "com.android.support:recyclerview-v7:$supportLibVersion"
+  androidTestCompile 'junit:junit:4.12'
   androidTestCompile "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+  androidTestCompile 'com.android.support.test:runner:1.0.1'
+  androidTestCompile 'com.android.support.test:rules:1.0.1'
 }
 
 android {
@@ -40,6 +43,8 @@ android {
 
     minSdkVersion 14
     targetSdkVersion 26
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 
   compileOptions {
