@@ -6,8 +6,7 @@ import android.app.DialogFragment
 import android.app.Fragment
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
-import java.util.WeakHashMap
-import java.util.Collections
+import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import android.support.v4.app.DialogFragment as SupportDialogFragment
@@ -93,9 +92,9 @@ private val Activity.viewFinder: Activity.(Int, View?) -> View?
 private val Dialog.viewFinder: Dialog.(Int, View?) -> View?
   get() = { id: Int, c: View? -> c?.findViewById(id) ?: findViewById(id) }
 private val DialogFragment.viewFinder: DialogFragment.(Int, View?) -> View?
-  get() = { id: Int, c: View? -> c?.findViewById(id) ?: dialog.findViewById(id) }
+  get() = { id: Int, c: View? -> c?.findViewById(id) ?: dialog?.findViewById(id) ?: view?.findViewById(id) }
 private val SupportDialogFragment.viewFinder: SupportDialogFragment.(Int, View?) -> View?
-  get() = { id: Int, c: View? -> c?.findViewById(id) ?: view!!.findViewById(id) }
+  get() = { id: Int, c: View? -> c?.findViewById(id) ?: dialog?.findViewById(id) ?: view?.findViewById(id) }
 private val Fragment.viewFinder: Fragment.(Int, View?) -> View?
   get() = { id: Int, c: View? -> c?.findViewById(id) ?: view.findViewById(id) }
 private val SupportFragment.viewFinder: SupportFragment.(Int, View?) -> View?
