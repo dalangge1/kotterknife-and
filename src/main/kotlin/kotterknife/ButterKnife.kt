@@ -106,44 +106,25 @@ private fun viewNotFound(id: Int, desc: KProperty<*>): Nothing =
     throw IllegalStateException("View ID $id for '${desc.name}' not found.")
 
 @Suppress("UNCHECKED_CAST")
-private fun <T, V : View> required(
-    id: Int, finder: T.(Int, View?) -> View?, container: Any): ReadOnlyProperty<T, V> {
-  val lazy = Lazy { c: View?, t: T, desc -> t.finder(id, c) as V? ?: viewNotFound(id, desc) }
-  ButterKnifeContainer.add(container, lazy)
-  return lazy
-}
+private fun <T, V : View> required(id: Int, finder: T.(Int, View?) -> View?, container: Any): ReadOnlyProperty<T, V>
+    = Lazy { c: View?, t: T, desc -> t.finder(id, c) as V? ?: viewNotFound(id, desc) }
+    .apply{ ButterKnifeContainer.add(container, this) }
 
 @Suppress("UNCHECKED_CAST")
-private fun <T, V : View> optional(
-    id: Int, finder: T.(Int, View?) -> View?, container: Any): ReadOnlyProperty<T, V?> {
-  val lazy = Lazy { c: View?, t: T, desc -> t.finder(id, c) as V? }
-  ButterKnifeContainer.add(container, lazy)
-  return lazy
-}
+private fun <T, V : View> optional(id: Int, finder: T.(Int, View?) -> View?, container: Any): ReadOnlyProperty<T, V?>
+    = Lazy { c: View?, t: T, desc -> t.finder(id, c) as V? }
+    .apply {   ButterKnifeContainer.add(container, this) }
 
 
 @Suppress("UNCHECKED_CAST")
-private fun <T, V : View> required(
-    ids: IntArray, finder: T.(Int, View?) -> View?,
-    container: Any): ReadOnlyProperty<T, List<V>> {
-  val lazy = Lazy { c: View?, t: T, desc ->
-    ids.map {
-      t.finder(it, c) as V? ?: viewNotFound(
-          it, desc)
-    }
-  }
-  ButterKnifeContainer.add(container, lazy)
-  return lazy
-}
+private fun <T, V : View> required(ids: IntArray, finder: T.(Int, View?) -> View?, container: Any): ReadOnlyProperty<T, List<V>>
+    = Lazy { c: View?, t: T, desc -> ids.map { t.finder(it, c) as V? ?: viewNotFound(it, desc) } }
+    .apply {   ButterKnifeContainer.add(container, this) }
 
 @Suppress("UNCHECKED_CAST")
-private fun <T, V : View> optional(
-    ids: IntArray, finder: T.(Int, View?) -> View?,
-    container: Any): ReadOnlyProperty<T, List<V>> {
-  val lazy = Lazy { c: View?, t: T, _ -> ids.map { t.finder(it, c) as V? }.filterNotNull() }
-  ButterKnifeContainer.add(container, lazy)
-  return lazy
-}
+private fun <T, V : View> optional(ids: IntArray, finder: T.(Int, View?) -> View?, container: Any): ReadOnlyProperty<T, List<V>>
+    = Lazy { c: View?, t: T, _ -> ids.map { t.finder(it, c) as V? }.filterNotNull() }
+    .apply {   ButterKnifeContainer.add(container, this) }
 
 // Like Kotlin's lazy delegate but the initializer gets the target and metadata passed to it
 private class Lazy<T, V>(private val initializer: (View?, T, KProperty<*>) -> V) : ReadOnlyProperty<T, V> {
