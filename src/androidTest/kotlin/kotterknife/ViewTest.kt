@@ -1,13 +1,14 @@
 package kotterknife
 
+import android.app.Fragment
 import android.content.Context
+import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.test.AndroidTestCase
+import android.view.LayoutInflater
 import android.view.View
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertEquals
+import android.view.ViewGroup
 
 public class ViewTest : AndroidTestCase() {
   public fun testCast() {
@@ -142,6 +143,22 @@ public class ViewTest : AndroidTestCase() {
     example.removeAllViews()
     assertNotNull(example.name)
     assertEquals(2, example.name.count())
+  }
+
+  public fun testBind() {
+    class ExampleFragment : Fragment() {
+      val name : TextView by bindView(1)
+
+      override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val view = FrameLayout(this@ViewTest.context)
+        view.addView(textViewWithId(1))
+        bind(view)
+        assertNotNull(name)
+        return view
+      }
+    }
+
+    ExampleFragment().onCreateView(null, null, null)
   }
 
   private fun viewWithId(id: Int) : View {
